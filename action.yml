@@ -1,15 +1,11 @@
-name: 'Multi Labeler'
-description: 'Multi labeler for title, body, comments, commit messages, branch, author or files with automated status checks.'
-author: 'Fuxing Loh'
+name: 'Push Commit Labeler'
+description: 'Add label to your issues using push commit messages. Just use on your commit message the following syntax "%YOUR_LABEL% #issue_number" to apply labels using commit messages'
+author: 'Fabio Luis Girardi'
 branding:
   icon: tag
   color: yellow
 
 inputs:
-  config-path:
-    description: 'The path for the label configurations'
-    default: '.github/labeler.yml'
-    required: false
   github-token:
     description: 'GITHUB_TOKEN or a `repo` scoped Personal Access Token (PAT)'
     required: false
@@ -17,4 +13,4 @@ inputs:
 
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'main.ts'
