@@ -2,7 +2,7 @@ const core        = require('@actions/core');
 const github      = require('@actions/github');
 const githubToken = core.getInput('github-token')
 const client      = github.getOctokit(githubToken)
-const octokit     = require("@octokit/request");
+//const octokit     = require("@octokit/request");
 
 //core.error('This is a bad error. This will also fail the build.')
 //core.warning('Something went wrong, but it\'s not bad enough to fail the build.')
@@ -19,7 +19,7 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
   return;
 }
 
-var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
+var labels = client.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo
 })
@@ -55,7 +55,7 @@ core.notice(labels);
         var IssueNumber = parseInt(results[r][4]);
         if (isNaN(IssueNumber)) continue;
          
-        octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+        client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           issue_number: IssueNumber,
