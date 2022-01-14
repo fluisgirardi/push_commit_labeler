@@ -24,6 +24,8 @@ var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
     repo: github.context.repo.repo
 })
 
+core.notice(github.context.repo.owner);
+core.notice(github.context.repo.repo);
 core.notice(labels);
 
 if ((!labels) || (!labels.length)) 
