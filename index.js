@@ -43,10 +43,9 @@ for (label in labels)
   for (const i in github.context.payload.commits)
   {
     if (!github.context.payload.commits[i].message) continue;
-    core.notice('Commit message'+i+' - '+github.context.payload.commits[i].message);
     
     var results = [...github.context.payload.commits[i].message.matchAll(regex)];
-    core.notice(results);
+    
     if (results.length>0)
     {
       for (r in results)
@@ -65,11 +64,12 @@ for (label in labels)
                repo: github.context.repo.repo,
                name: label
            });
-           console.warning(typeof req);
+           console.warning('typeof req'+(req instanceof RequestError));
            exists = !(req instanceof RequestError);
         }
         catch (e)
         {
+          console.warning(e);
           exists = false;
         }
 
