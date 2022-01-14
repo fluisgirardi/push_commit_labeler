@@ -59,7 +59,7 @@ for (label in labels)
         exists = false;
         try
         {
-           let req = client.request('GET /repos/{owner}/{repo}/labels/{name}', {
+           let req = await client.request('GET /repos/{owner}/{repo}/labels/{name}', {
                owner: github.context.repo.owner,
                repo: github.context.repo.repo,
                name: label
