@@ -34,23 +34,25 @@ if ((!labels) || (!labels.length))
   return;
 }
 
-for (label in labels)
-{
-  var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)');
-  core.notice('Looking for commit messages with %'+label.name);
+//for (label in labels)
+//{
+  //var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
+  var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
+  //core.notice('Looking for commit messages with %'+label.name);
   
   for (const i in github.context.payload.commits)
   {
     if (!github.context.payload.commits[i].message) continue;
     core.notice('Commit message'+i+' - '+github.context.payload.commits[i].message);
-    var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
+    
     var results = [...github.context.payload.commits[i].message.matchAll(regex)];
     core.notice(results);
     if (result.length>0)
     {
       for (r in results)
       {
-        var IssueNumber = parseInt(r[3]);
+        var label = results[r][3]
+        var IssueNumber = parseInt(results[r][4]);
         if (isNaN(IssueNumber)) continue;
          
         client.issues.addLabels({
@@ -61,7 +63,7 @@ for (label in labels)
         })
       }
     }
-  }
+  //}
 }
 
 
