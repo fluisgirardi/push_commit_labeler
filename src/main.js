@@ -16,7 +16,7 @@ function main_run()
     )
   }
   
-  var labels = await octokit.request('GET /repos/{owner}/{repo}/labels', {
+  var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo
   })
