@@ -34,7 +34,7 @@ function main_run()
          for (r in results)
          {
            var IssueNumber = parseInt(r[3]);
-           if isNaN(IssueNumber) continue;
+           if (isNaN(IssueNumber)) continue;
            
            client.issues.addLabels({
              owner: github.context.repo.owner,
