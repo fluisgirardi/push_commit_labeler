@@ -6,14 +6,18 @@ const githubToken = core.getInput('github-token')
 
 const client = github.getOctokit(githubToken)
 
-const push = github.context.payload.push
 
 function main_run()
 {
-  if (!push) {
-    throw new Error(
-      'Could not get push from context'
-    )
+  if (!github.context.payload) 
+  {
+    throw new Error('No payload found in the context.')
+  }
+
+  if ((!github.context.payload.commits) || (!github.context.payload.commits.length)) 
+  {
+    core.debug(' - skipping commits')
+    break
   }
   
   var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
@@ -25,10 +29,12 @@ function main_run()
   {
     var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)')
     
-    for (commit in push.commits)
+    for (const i in github.context.payload.commits)
     {
+      if (!github.context.payload.commits[i].message) continue;
+
       var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
-      var results = [...commit.message.matchAll(regex)];
+      var results = [...github.context.payload.commits[i].message.matchAll(regex)];
       if (result.length>0)
       {
          for (r in results)
@@ -49,4 +55,3 @@ function main_run()
 }
 
 main_run();
-
