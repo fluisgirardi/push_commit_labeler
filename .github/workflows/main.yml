@@ -4,7 +4,7 @@ on:
 permissions:
   # Setting up permissions in the workflow to limit the scope of what it can do. Optional!
   contents: read
-  issues: write
+  issues: read|write
   pull-requests: write
   statuses: write
   checks: write
