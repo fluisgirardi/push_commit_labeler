@@ -56,12 +56,18 @@ async function main()
   
           try
           {
-            client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+            let req = await client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
               owner: github.context.repo.owner,
               repo: github.context.repo.repo,
               issue_number: IssueNumber,
               labels: [label]
-            })
+            });
+
+            if (req.status==200)
+              core.notice('Label "'+label'" added to issue #'+results[r][3]);
+            else
+              core.notice('Cannot add label "'+label'" added to issue #'+results[r][3]);
+
           }
           catch (e)
           {
