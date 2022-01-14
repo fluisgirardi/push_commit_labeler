@@ -58,6 +58,21 @@ for (label in labels)
 
         try
         {
+           client.request('GET /repos/{owner}/{repo}/labels/{name}', {
+               owner: github.context.repo.owner,
+               repo: github.context.repo.repo,
+               name: label
+           })
+        }
+        catch
+        {
+          core.warning('Skippinp label that dont exists: '+label);
+          continue;
+        }
+
+
+        try
+        {
           client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
