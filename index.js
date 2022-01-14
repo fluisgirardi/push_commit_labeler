@@ -28,7 +28,7 @@ var labels = client.request('GET /repos/'+github.context.repo.owner+'/'+github.c
 core.notice(github.context.repo.owner);
 core.notice(github.context.repo.repo);
 core.notice(labels);
-
+core.notice(github.context.payload.commits);
 for (label in labels)
 {
   var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)');
