@@ -16,8 +16,8 @@ function main_run()
 
   if ((!github.context.payload.commits) || (!github.context.payload.commits.length)) 
   {
-    core.debug(' - skipping commits')
-    break
+    core.debug(' - skipping commits');
+    return;
   }
   
   var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
