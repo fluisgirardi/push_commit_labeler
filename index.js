@@ -60,18 +60,18 @@ for (label in labels)
         exists = false;
         try
         {
-           client.request('GET /repos/{owner}/{repo}/labels/{name}', {
+           let req = client.request('GET /repos/{owner}/{repo}/labels/{name}', {
                owner: github.context.repo.owner,
                repo: github.context.repo.repo,
                name: label
            });
-           exists = true;
+           console.warning(typeof req);
+           exists = !(req instanceof RequestError);
         }
-        catch
+        catch (e)
         {
           exists = false;
         }
-
 
         if (exists)
         {
@@ -84,7 +84,7 @@ for (label in labels)
               labels: [label]
             })
           }
-          catch
+          catch (e)
           {
           }
         }
