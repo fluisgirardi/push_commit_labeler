@@ -27,22 +27,19 @@ async function main()
       repo: github.context.repo.repo,
   });
   
-  
-  
-  core.notice(labels);
-  
-  //WHEN Issue/TODO #3 is done, uncoment this
-  /*if ((!labels) || (!labels.length)) 
+  if ((!labels) || (!labels.data) || (!labels.data.length)) 
   {
     core.error('Skipping: no Labels');
     return;
   }
-  for (label in labels)
+
+
+  for (label in labels.data)
   {
-    //var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
-  */
-    var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
-    //core.notice('Looking for commit messages with %'+label.name);
+    core.notice('Looking for commit messages with %'+labels.data[label].name+'%');
+    var regex = new RegExp('((%'+labels.data[label].name+'% #)(\\d+))','gmi');
+  
+    //var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
     
     for (const i in github.context.payload.commits)
     {
@@ -98,7 +95,7 @@ async function main()
           }
         }
       }
-    //}
+    }
   }
 }
 
