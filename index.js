@@ -67,10 +67,11 @@ async function main()
               core.notice('Label "'+label+'" added to issue #'+results[r][3]);
             else
               core.notice('Cannot add label "'+label+'" added to issue #'+results[r][3]);
-            
+
           }
           catch (e)
           {
+            core.notice('Cannot add label "'+label+'" added to issue #'+results[r][3]);
             core.warning(e);
           }
         }
