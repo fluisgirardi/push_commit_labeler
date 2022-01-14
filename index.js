@@ -51,15 +51,15 @@ core.notice(labels);
     {
       for (r in results)
       {
-        var label = results[r][3]
+        var label = new Array(results[r][3]);
         var IssueNumber = parseInt(results[r][4]);
         if (isNaN(IssueNumber)) continue;
          
-        client.issues.addLabels({
+        octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
           issue_number: IssueNumber,
-          labels: label
+          labels: [label]
         })
       }
     }
