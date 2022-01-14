@@ -2,6 +2,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const githubToken = core.getInput('github-token')
 const client = github.getOctokit(githubToken)
+const octokit = require("@octokit/request");
 
 //core.error('This is a bad error. This will also fail the build.')
 //core.warning('Something went wrong, but it\'s not bad enough to fail the build.')
@@ -18,20 +19,16 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
   return;
 }
 
-var labels = client.request('GET /repos/'+github.context.repo.owner+'/'+github.context.repo.repo+'/labels', {});
+var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo
+})
 
-//if ((!labels) || (!labels.length)) 
-//{
-//  core.error('Skipping: no Labels');
-//  return;
-//}
-
-core.notice(github.context.repo.owner);
-core.notice(github.context.repo.repo);
-core.notice(labels);
-core.notice(github.context.payload.commits);
-core.notice(github);
-core.notice(github.context);
+if ((!labels) || (!labels.length)) 
+{
+  core.error('Skipping: no Labels');
+  return;
+}
 
 for (label in labels)
 {
