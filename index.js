@@ -18,10 +18,7 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
   return;
 }
 
-var labels = client.request('GET /repos/{owner}/{repo}/labels', {
-  owner: github.context.repo.owner,
-  repo: github.context.repo.repo
-});
+var labels = client.request('GET /repos/'+github.context.repo.owner+'/'+github.context.repo.repo+'/labels', {});
 
 //if ((!labels) || (!labels.length)) 
 //{
