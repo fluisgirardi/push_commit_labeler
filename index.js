@@ -23,11 +23,11 @@ var labels = client.request('GET /repos/{owner}/{repo}/labels', {
   repo: github.context.repo.repo
 });
 
-if ((!labels) || (!labels.length)) 
-{
-  core.error('Skipping: no Labels');
-  return;
-}
+//if ((!labels) || (!labels.length)) 
+//{
+//  core.error('Skipping: no Labels');
+//  return;
+//}
 
 core.notice(labels);
 
