@@ -8,6 +8,11 @@ const client      = github.getOctokit(githubToken)
 //core.warning('Something went wrong, but it\'s not bad enough to fail the build.')
 //core.notice('Something happened that you might want to know about.')
 
+function delay(ms) 
+{
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
 if (!github.context.payload) 
 {
   throw new Error('No payload found in the context.')
@@ -23,7 +28,9 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
 var labels = client.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-})
+});
+
+await delay(10000);
 
 core.notice(labels);
 
