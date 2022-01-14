@@ -64,12 +64,12 @@ for (label in labels)
                repo: github.context.repo.repo,
                name: label
            });
-           core.warning(typeof req);
+           core.warning(req);
            exists = false; //!(req instanceof RequestError);
         }
         catch (e)
         {
-          core.warning(e);
+          core.error(e);
           exists = false;
         }
 
