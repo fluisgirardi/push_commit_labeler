@@ -21,16 +21,26 @@ var labels = await octokit.request('GET /repos/{owner}/{repo}/labels', {
 
 for (label in labels)
 {
-  var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)'),
+  var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)')
+  
   for (commit in push.commits)
   {
-    
-    var IssueNumber;
-    await client.issues.addLabels({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      issue_number: IssueNumber,
-      labels: label
-    })
+    var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
+    var results = [...commit.message.matchAll(regex)];
+    if (result.length>0)
+    {
+       for (r in results)
+       {
+         var IssueNumber = parseInt(r[3]);
+         if isNaN(IssueNumber) continue;
+         
+         await client.issues.addLabels({
+           owner: github.context.repo.owner,
+           repo: github.context.repo.repo,
+           issue_number: IssueNumber,
+           labels: label
+         })
+       }
+    }
   }
 }
