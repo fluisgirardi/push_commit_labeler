@@ -36,7 +36,7 @@ function main_run()
            var IssueNumber = parseInt(r[3]);
            if isNaN(IssueNumber) continue;
            
-           await client.issues.addLabels({
+           client.issues.addLabels({
              owner: github.context.repo.owner,
              repo: github.context.repo.repo,
              issue_number: IssueNumber,
