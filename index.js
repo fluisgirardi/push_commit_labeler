@@ -28,7 +28,8 @@ var labels = client.request('GET /repos/{owner}/{repo}/labels', {
 //  core.error('Skipping: no Labels');
 //  return;
 //}
-
+core.notice(github.context.repo.owner);
+core.notice(github.context.repo.repo);
 core.notice(labels);
 
 for (label in labels)
