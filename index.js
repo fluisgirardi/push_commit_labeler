@@ -20,7 +20,7 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
 }
 
 //TODO #3: Why this returns a empty list?
-var labels = client.request('GET /repos/{owner}/{repo}/labels/', {
+var labels = client.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
 })
