@@ -64,8 +64,8 @@ for (label in labels)
                repo: github.context.repo.repo,
                name: label
            });
-           core.warning('typeof req'+(req instanceof RequestError));
-           exists = !(req instanceof RequestError);
+           core.warning(typeof req);
+           exists = false; //!(req instanceof RequestError);
         }
         catch (e)
         {
