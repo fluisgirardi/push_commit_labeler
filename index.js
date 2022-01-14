@@ -33,12 +33,11 @@ async function main()
     return;
   }
 
-
-  for (label in labels.data)
+  for (lidx in labels.data)
   {
-    core.notice('Looking for commit messages with %'+labels.data[label].name+'%');
-    var regex = new RegExp('((%'+labels.data[label].name+'% #)(\\d+))','gmi');
-  
+    var label = labels.data[lidx].name
+    core.notice('Looking for commit messages with %'+label+'%');
+    var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');  
     //var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
     
     for (const i in github.context.payload.commits)
@@ -51,47 +50,22 @@ async function main()
       {
         for (r in results)
         {
-          var label = results[r][3];
-          var IssueNumber = parseInt(results[r][4]);
-          let exists = false;
+          var IssueNumber = parseInt(results[r][3]);
           
           if (isNaN(IssueNumber)) continue;
   
-          exists = false;
           try
           {
-             let req = await client.request('GET /repos/{owner}/{repo}/labels/{name}', {
-                 owner: github.context.repo.owner,
-                 repo: github.context.repo.repo,
-                 name: label
-             });
-             core.warning(req);
-             exists = false; //!(req instanceof RequestError);
+            client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              issue_number: IssueNumber,
+              labels: [label]
+            })
           }
           catch (e)
           {
-            core.error(e);
-            exists = false;
-          }
-  
-          if (exists)
-          {
-            try
-            {
-              client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                issue_number: IssueNumber,
-                labels: [label]
-              })
-            }
-            catch (e)
-            {
-            }
-          }
-          else
-          {
-            core.warning('Skippinp label that dont exists: '+label);
+            core.warning(e);
           }
         }
       }
