@@ -53,36 +53,44 @@ for (label in labels)
       {
         var label = results[r][3];
         var IssueNumber = parseInt(results[r][4]);
+        let exists = false;
         
         if (isNaN(IssueNumber)) continue;
 
+        exists = false;
         try
         {
            client.request('GET /repos/{owner}/{repo}/labels/{name}', {
                owner: github.context.repo.owner,
                repo: github.context.repo.repo,
                name: label
-           })
+           });
+           exists = true;
         }
         catch
+        {
+          exists = false;
+        }
+
+
+        if (exists)
+        {
+          try
+          {
+            client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              issue_number: IssueNumber,
+              labels: [label]
+            })
+          }
+          catch
+          {
+          }
+        }
+        else
         {
           core.warning('Skippinp label that dont exists: '+label);
-          continue;
-        }
-
-
-        try
-        {
-          client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
-            owner: github.context.repo.owner,
-            repo: github.context.repo.repo,
-            issue_number: IssueNumber,
-            labels: [label]
-          })
-        }
-        catch
-        {
-
         }
       }
     }
