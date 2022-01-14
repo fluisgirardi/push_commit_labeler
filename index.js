@@ -47,7 +47,7 @@ core.notice(labels);
     
     var results = [...github.context.payload.commits[i].message.matchAll(regex)];
     core.notice(results);
-    if (result.length>0)
+    if (results.length>0)
     {
       for (r in results)
       {
