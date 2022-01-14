@@ -8,98 +8,98 @@ const client      = github.getOctokit(githubToken)
 //core.warning('Something went wrong, but it\'s not bad enough to fail the build.')
 //core.notice('Something happened that you might want to know about.')
 
-function delay(ms) 
+async function main()
 {
-    return new Promise( resolve => setTimeout(resolve, ms) );
-}
-
-if (!github.context.payload) 
-{
-  throw new Error('No payload found in the context.')
-}
-
-if ((!github.context.payload.commits) || (!github.context.payload.commits.length)) 
-{
-  core.error('Skipping: no commits');
-  return;
-}
-
-//TODO #3: Why this returns a empty list?
-var labels = client.request('GET /repos/{owner}/{repo}/labels', {
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-});
-
-await delay(10000);
-
-core.notice(labels);
-
-//WHEN Issue/TODO #3 is done, uncoment this
-/*if ((!labels) || (!labels.length)) 
-{
-  core.error('Skipping: no Labels');
-  return;
-}
-for (label in labels)
-{
-  //var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
-*/
-  var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
-  //core.notice('Looking for commit messages with %'+label.name);
-  
-  for (const i in github.context.payload.commits)
+  if (!github.context.payload) 
   {
-    if (!github.context.payload.commits[i].message) continue;
+    throw new Error('No payload found in the context.')
+  }
+  
+  if ((!github.context.payload.commits) || (!github.context.payload.commits.length)) 
+  {
+    core.error('Skipping: no commits');
+    return;
+  }
+  
+  //TODO #3: Why this returns a empty list?
+  var labels = await client.request('GET /repos/{owner}/{repo}/labels', {
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+  });
+  
+  
+  
+  core.notice(labels);
+  
+  //WHEN Issue/TODO #3 is done, uncoment this
+  /*if ((!labels) || (!labels.length)) 
+  {
+    core.error('Skipping: no Labels');
+    return;
+  }
+  for (label in labels)
+  {
+    //var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
+  */
+    var regex = new RegExp('((%([a-zA-Z][a-zA-Z0-9]+)% #)(\\d+))','gmi');
+    //core.notice('Looking for commit messages with %'+label.name);
     
-    var results = [...github.context.payload.commits[i].message.matchAll(regex)];
-    
-    if (results.length>0)
+    for (const i in github.context.payload.commits)
     {
-      for (r in results)
+      if (!github.context.payload.commits[i].message) continue;
+      
+      var results = [...github.context.payload.commits[i].message.matchAll(regex)];
+      
+      if (results.length>0)
       {
-        var label = results[r][3];
-        var IssueNumber = parseInt(results[r][4]);
-        let exists = false;
-        
-        if (isNaN(IssueNumber)) continue;
-
-        exists = false;
-        try
+        for (r in results)
         {
-           let req = await client.request('GET /repos/{owner}/{repo}/labels/{name}', {
-               owner: github.context.repo.owner,
-               repo: github.context.repo.repo,
-               name: label
-           });
-           core.warning(req);
-           exists = false; //!(req instanceof RequestError);
-        }
-        catch (e)
-        {
-          core.error(e);
+          var label = results[r][3];
+          var IssueNumber = parseInt(results[r][4]);
+          let exists = false;
+          
+          if (isNaN(IssueNumber)) continue;
+  
           exists = false;
-        }
-
-        if (exists)
-        {
           try
           {
-            client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
-              owner: github.context.repo.owner,
-              repo: github.context.repo.repo,
-              issue_number: IssueNumber,
-              labels: [label]
-            })
+             let req = await client.request('GET /repos/{owner}/{repo}/labels/{name}', {
+                 owner: github.context.repo.owner,
+                 repo: github.context.repo.repo,
+                 name: label
+             });
+             core.warning(req);
+             exists = false; //!(req instanceof RequestError);
           }
           catch (e)
           {
+            core.error(e);
+            exists = false;
+          }
+  
+          if (exists)
+          {
+            try
+            {
+              client.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                issue_number: IssueNumber,
+                labels: [label]
+              })
+            }
+            catch (e)
+            {
+            }
+          }
+          else
+          {
+            core.warning('Skippinp label that dont exists: '+label);
           }
         }
-        else
-        {
-          core.warning('Skippinp label that dont exists: '+label);
-        }
       }
-    }
-  //}
+    //}
+  }
 }
+
+main();
