@@ -21,7 +21,7 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
 
 var labels = client.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
-    repo: github.context.repo.repo
+    repo: github.context.repo.repo,
 })
 
 core.notice(github.context.repo.owner);
@@ -51,7 +51,7 @@ core.notice(labels);
     {
       for (r in results)
       {
-        var label = new Array(results[r][3]);
+        var label = results[r][3];
         var IssueNumber = parseInt(results[r][4]);
         if (isNaN(IssueNumber)) continue;
          
