@@ -16,7 +16,7 @@ function main_run()
 
   if ((!github.context.payload.commits) || (!github.context.payload.commits.length)) 
   {
-    core.debug(' - skipping commits');
+    console.log(' - skipping commits');
     return;
   }
   
@@ -25,21 +25,21 @@ function main_run()
     repo: github.context.repo.repo
   });
 
-  core.debug(labels);
+  console.log(labels);
   
   for (label in labels)
   {
     var regexp = new RegExp('(%'+label.name+'% #)(\d+)(.*)');
-    core.debug('Looking for commit messages with %'+label.name);
+    console.log('Looking for commit messages with %'+label.name);
     
     for (const i in github.context.payload.commits)
     {
       if (!github.context.payload.commits[i].message) continue;
-      core.debug('Commit message'+i+' - '+github.context.payload.commits[i].message);
+      console.log('Commit message'+i+' - '+github.context.payload.commits[i].message);
 
       var regex = new RegExp('((%'+label+'% #)(\\d+))','gmi');
       var results = [...github.context.payload.commits[i].message.matchAll(regex)];
-      core.debug(results);
+      console.log(results);
       if (result.length>0)
       {
          for (r in results)
