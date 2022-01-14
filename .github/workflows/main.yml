@@ -1,8 +1,4 @@
 on:
-  pull_request_target: # for OSS with public contributions (forked PR)   
-  pull_request:
-  issues:
-  issue_comment:
   push:
 
 permissions:
