@@ -19,7 +19,7 @@ if ((!github.context.payload.commits) || (!github.context.payload.commits.length
   return;
 }
 
-var labels = await octokit.request('GET /repos/{owner}/{repo}/labels', {
+var labels = octokit.request('GET /repos/{owner}/{repo}/labels', {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo
 })
