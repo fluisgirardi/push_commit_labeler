@@ -64,10 +64,10 @@ async function main()
             });
 
             if (req.status==200)
-              core.notice('Label "'+label'" added to issue #'+results[r][3]);
+              core.notice('Label "'+label+'" added to issue #'+results[r][3]);
             else
-              core.notice('Cannot add label "'+label'" added to issue #'+results[r][3]);
-
+              core.notice('Cannot add label "'+label+'" added to issue #'+results[r][3]);
+            
           }
           catch (e)
           {
